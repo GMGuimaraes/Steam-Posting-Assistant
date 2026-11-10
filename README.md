@@ -11,10 +11,13 @@ A small, local-first toolkit for cataloging and preparing artwork files before y
 - Identify identical files by SHA-256 so you can review duplicates.
 - Read-only operation: source images are never moved, renamed, or deleted.
 
-## Requirements
+## Dependencies
 
-- Python 3.9 or newer.
-- Optional: Pillow for image dimensions across more formats.
+### Steam Art Assistant
+
+- **Python 3.9 or newer**.
+- No mandatory third-party Python packages.
+- Optional: **Pillow** to read image dimensions from more image formats.
 
 Install the optional dependency:
 
@@ -22,7 +25,24 @@ Install the optional dependency:
 python -m pip install Pillow
 ```
 
-## Quick start
+Or install the optional dependencies listed in this repository:
+
+```bash
+python -m pip install -r requirements-optional.txt
+```
+
+### Steam games CSV exporter (separate tool)
+
+If you want a CSV containing your own Steam games, use the separate [Steam Library Exporter](https://github.com/FunnyEntity/steam_library_exporter). It is not bundled with this project and has its own requirements:
+
+- Python 3.11 or newer.
+- Its dependencies, installed from that project's `requirements.txt`.
+- A Steam Web API key and your SteamID64.
+- Your Steam profile and Game details must be set to **Public** for the Web API to return your library.
+
+See [the CSV export instructions](docs/USAGE.md#export-your-steam-game-list-to-csv). Never publish your API key or the CSV containing your personal library.
+
+## Quick start: catalog artwork
 
 ```bash
 python src/artwork_catalog.py "/path/to/artwork" --output artwork_inventory.csv
@@ -34,7 +54,7 @@ On Windows, for example:
 py -3 src\artwork_catalog.py "C:\Users\YourName\Pictures\Steam Artwork" --output artwork_inventory.csv
 ```
 
-Open the CSV in a spreadsheet program. Review duplicate hashes before deciding what to keep.
+Open the generated CSV in a spreadsheet program. Review duplicate hashes before deciding what to keep.
 
 ## Manual publishing workflow
 
@@ -44,7 +64,7 @@ Open the CSV in a spreadsheet program. Review duplicate hashes before deciding w
 4. Upload and publish manually, reviewing the page and all settings before submitting.
 5. Update your own records after verifying the result on the Steam Community page.
 
-Never put passwords, session cookies, browser profiles, API tokens, or private account data in this repository.
+Never put passwords, session cookies, browser profiles, API tokens, personal game-library CSVs, or other private account data in this repository.
 
 ## Project scope and disclaimer
 
