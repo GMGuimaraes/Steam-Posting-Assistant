@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+.env.*
+
+# Local user data
+*.log
+*.csv
+*.json
+*.jsonl
+*.sqlite3
+*.db
+*.bak
+*.backup*
+*.tmp
+
+# Browser state and credentials
+*profile*/
+*browser-data*/
+*user-data*/
+cookies*
+*token*
+credentials*
+secrets*
+
+# Artwork and generated media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.bmp
+*.tif
+*.tiff
+*.mp4
+*.mov
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
