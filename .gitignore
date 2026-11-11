@@ -7,7 +7,7 @@ venv/
 .env
 .env.*
 
-# Local user data
+# Local user data and generated output
 *.log
 *.csv
 *.json
@@ -17,6 +17,11 @@ venv/
 *.bak
 *.backup*
 *.tmp
+html_pages/
+steam_perfil/
+SteamPost-perfil/
+review_atual.txt
+fila_reviews.csv
 
 # Browser state and credentials
 *profile*/
