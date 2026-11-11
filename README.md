@@ -8,7 +8,7 @@ A local-first toolkit for collecting and organizing Steam review history, prepar
 - Opens Steam Community in a persistent Playwright browser profile so the user can sign in manually and reuse the session locally.
 - Downloads review-history pages sequentially using page-number URLs.
 - Waits for review containers to render and applies delays between requests.
-- Saves the retrieved HTML pages locally in \`html_pages/\` for offline processing.
+- Saves the retrieved HTML pages locally in `html_pages/` for offline processing.
 - Stops when the profile's review history reaches an empty/end-of-history page.
 
 ### Review-history CSV compiler
@@ -18,15 +18,15 @@ A local-first toolkit for collecting and organizing Steam review history, prepar
 - Reports pages that could not be parsed and preserves successfully extracted records in the output.
 
 ### Steam review draft queue
-- Reads a private \`fila_reviews.csv\` queue based on \`tools/fila_reviews.example.csv\`.
+- Reads a private `fila_reviews.csv` queue based on `tools/fila_reviews.example.csv`.
 - Opens the specific public Steam Store URL for each AppID; the user confirms whether the correct game page opened.
-- Marks invalid AppIDs or pages that fail/redirect to a general Steam page as \`UNAVAILABLE\` and advances to the next row.
-- Saves the current review to \`review_atual.txt\` and copies the complete title and body to the clipboard.
+- Marks invalid AppIDs or pages that fail/redirect to a general Steam page as `UNAVAILABLE` and advances to the next row.
+- Saves the current review to `review_atual.txt` and copies the complete title and body to the clipboard.
 - Offers three controls after manual publication:
-  - **S** — confirm that the user published the review; save \`PUBLICADA\` and continue.
-  - **N** — leave the current row as \`DRAFT\` and exit.
-  - **P** — save the queue, record a pause note, leave the current row as \`DRAFT\`, and exit.
-- Resumes from the first pending \`DRAFT\` on the next run. Rows marked \`PUBLICADA\` or \`UNAVAILABLE\` are not presented again.
+  - **S** — confirm that the user published the review; save `PUBLICADA` and continue.
+  - **N** — leave the current row as `DRAFT` and exit.
+  - **P** — save the queue, record a pause note, leave the current row as `DRAFT`, and exit.
+- Resumes from the first pending `DRAFT` on the next run. Rows marked `PUBLICADA` or `UNAVAILABLE` are not presented again.
 - Saves queue updates atomically and creates a local backup before the first update.
 
 The helper does **not** sign in, open or fill a review form, submit, or publish anything on Steam. The user pastes and publishes the review manually, then confirms it with **S**.
@@ -59,13 +59,13 @@ Optional image-dimension support:
 py -3 -m pip install Pillow
 ~~~
 
-Or install Pillow from \`requirements-optional.txt\`.
+Or install Pillow from `requirements-optional.txt`.
 
 ## Quick start
 
 ### 1. Download review-history pages
 
-1. Open \`1_baixar_paginas.py\` and replace \`YOUR_ID_STEAM\` in the \`STEAM_ID\` setting with your Steam profile vanity URL or profile identifier.
+1. Open `1_baixar_paginas.py` and replace `YOUR_ID_STEAM` in the `STEAM_ID` setting with your Steam profile vanity URL or profile identifier.
 2. Run:
 
 ~~~powershell
@@ -85,13 +85,13 @@ After the download is complete, run:
 py -3 2_criar_csv.py
 ~~~
 
-The output is \`todos_jogos_com_comentarios.csv\`.
+The output is `todos_jogos_com_comentarios.csv`.
 
 ### 3. Prepare review drafts
 
-1. Copy \`tools/fila_reviews.example.csv\` to \`tools/fila_reviews.csv\`.
-2. Add your own AppIDs, game names, hours, public Store URLs, review titles, review text, and initial \`DRAFT\` status.
-3. Double-click \`tools/postarReview.bat\`.
+1. Copy `tools/fila_reviews.example.csv` to `tools/fila_reviews.csv`.
+2. Add your own AppIDs, game names, hours, public Store URLs, review titles, review text, and initial `DRAFT` status.
+3. Double-click `tools/postarReview.bat`.
 
 After the script prepares a review, paste the clipboard contents into Steam yourself, publish manually if you choose, and answer **S** only after verifying publication. Use **N** to leave the draft pending and exit, or **P** to save the current queue and pause. On the next run, completed and unavailable rows are skipped.
 
@@ -108,13 +108,13 @@ The cataloger does not alter the source images.
 ## Private files and safety
 
 Keep these files and folders on your own computer. Do not commit them:
-- Personal review queues such as \`fila_reviews.csv\`.
-- Generated review text such as \`review_atual.txt\`.
+- Personal review queues such as `fila_reviews.csv`.
+- Generated review text such as `review_atual.txt`.
 - Steam browser profiles, cookies, and session data.
 - Downloaded HTML pages and personal CSV exports.
 - Steam API keys, passwords, session cookies, or other credentials.
 
-The repository's \`.gitignore\` excludes common local data, generated outputs, and browser state. Review it before committing new files.
+The repository's `.gitignore` excludes common local data, generated outputs, and browser state. Review it before committing new files.
 
 ## Steam Library CSV exporter (optional, separate project)
 

@@ -23,7 +23,7 @@ This installs Pillow. Without Pillow, the cataloger still scans image files and 
 
 ## 2. Download Steam review history
 
-1. Edit the \`STEAM_ID\` setting in \`1_baixar_paginas.py\` and replace \`YOUR_ID_STEAM\` with your profile vanity URL or profile identifier.
+1. Edit the `STEAM_ID` setting in `1_baixar_paginas.py` and replace `YOUR_ID_STEAM` with your profile vanity URL or profile identifier.
 2. Run:
 
 ~~~powershell
@@ -33,7 +33,7 @@ py -3 1_baixar_paginas.py
 3. Sign in manually in the Playwright browser if necessary.
 4. Return to the terminal and press Enter to start sequential page downloads.
 
-The script uses a persistent local browser profile and stores downloaded pages in \`html_pages/\`. Keep both private.
+The script uses a persistent local browser profile and stores downloaded pages in `html_pages/`. Keep both private.
 
 ## 3. Compile review history to CSV
 
@@ -43,7 +43,7 @@ After the HTML download finishes:
 py -3 2_criar_csv.py
 ~~~
 
-The compiler reads pages in numeric order, attempts to extract game title, AppID, sentiment, and review text, removes duplicate AppIDs, and writes \`todos_jogos_com_comentarios.csv\`.
+The compiler reads pages in numeric order, attempts to extract game title, AppID, sentiment, and review text, removes duplicate AppIDs, and writes `todos_jogos_com_comentarios.csv`.
 
 The parser depends on Steam's page markup and may report pages where no supported review structure was found.
 
@@ -53,11 +53,11 @@ See [Review preparation guide](REVIEW_PREPARATION.md).
 
 In short:
 
-1. Copy \`tools/fila_reviews.example.csv\` to \`tools/fila_reviews.csv\`.
-2. Fill it with your own review data and mark pending rows as \`DRAFT\`.
-3. Run \`tools/postarReview.bat\`.
+1. Copy `tools/fila_reviews.example.csv` to `tools/fila_reviews.csv`.
+2. Fill it with your own review data and mark pending rows as `DRAFT`.
+3. Run `tools/postarReview.bat`.
 4. Paste and publish manually. Use **S** only after confirming publication; **N** leaves the row pending and exits; **P** saves the queue and pauses.
-5. Later runs skip rows marked \`PUBLICADA\` or \`UNAVAILABLE\`.
+5. Later runs skip rows marked `PUBLICADA` or `UNAVAILABLE`.
 
 The helper does not submit reviews or verify publication automatically.
 
@@ -69,7 +69,7 @@ Run:
 py -3 src/artwork_catalog.py "C:\path\to\artwork" --output artwork_inventory.csv
 ~~~
 
-Recursive scanning is enabled by default. Use \`--no-recursive\` to scan only the selected folder.
+Recursive scanning is enabled by default. Use `--no-recursive` to scan only the selected folder.
 
 The generated inventory contains file name, relative path, extension, size, SHA-256, optional width and height, and a duplicate reference when matching hashes are found. Source images are never changed.
 
@@ -87,4 +87,4 @@ Do not upload:
 - Browser profiles, cookies, or session files.
 - Passwords, API keys, session tokens, or other credentials.
 
-Review the repository's \`.gitignore\` before committing files.
+Review the repository's `.gitignore` before committing files.
