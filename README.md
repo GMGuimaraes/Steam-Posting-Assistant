@@ -89,6 +89,44 @@ The helper does not open a review form or fill any Steam page. See the [complete
 
 Never put passwords, session cookies, browser profiles, API tokens, personal game-library CSVs, or private review queues in this repository.
 
+
+🛠️ Key Features
+
+• Session Persistence: Uses Playwright's launch_persistent_context to store cookies locally (steam_perfil), keeping you logged in across script runs.
+• Manual CMD Interlock: Pauses execution until you press [ENTER] in the terminal, allowing time for initial authentication and page loading.
+• Direct URL Pagination: Injects numerical page parameters (?p=1, ?p=2) directly into the URL to ensure flawless navigation without relying on fragile UI buttons.
+• Smart Screen Anchors: Uses wait_for_selector to pause saving until review containers (.review_box) physically load, preventing blank HTML files.
+• Rate-Limit Prevention: Implements built-in cooldown delays (3 to 5 seconds per page) to mimic human browsing behavior safely.
+• Automatic Termination: Scans page contents for end-of-history markers to safely close the script when finished.
+• Beautiful Soup Compiler: Parses the raw cached HTML files, sanitizes game titles, drops duplicates, and exports a clean utf-8 encoded CSV file.
+
+
+To download you review list
+
+🚀 Quick Start
+
+
+1. Prerequisites
+
+bash
+pip install playwright beautifulsoup4
+playwright install
+Use code with caution.
+
+2. Download HTML Pages
+
+bash
+python 1_baixar_paginas.py
+Use code with caution.
+Log into Steam in the browser window if needed, return to your terminal, and press Enter.
+
+3. Compile to CSV
+
+bash
+python 2_criar_csv.py
+Use code with caution.
+
+
 ## Project scope and disclaimer
 
 This is an independent community utility and is not affiliated with, endorsed by, or sponsored by Valve or Steam. Steam and Steam Community are trademarks of Valve Corporation. Follow the current Steam Subscriber Agreement and applicable community rules.
