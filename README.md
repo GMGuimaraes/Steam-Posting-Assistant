@@ -1,42 +1,56 @@
 # Steam Art Assistant
 
-A small, local-first toolkit for cataloging and preparing artwork files before you publish them manually.
+A local-first toolkit for cataloging artwork files, preparing material for manual Steam publishing, and organizing draft Steam reviews for manual publication.
 
-**This project does not connect to Steam or automate actions on Steam.** It does not log in, open a browser, upload artwork, submit forms, accept terms, like, favorite, or claim games. You remain in control of every action on the Steam website.
+**This project does not automate actions on Steam.** It does not log in, upload artwork, fill review forms, submit content, accept terms, like, favorite, or claim games. The review helper only copies a draft to your clipboard and may open the game's public store page for reference. You remain in control of every action on the Steam website.
 
 ## Features
 
+### Artwork catalog
 - Scan a folder of artwork images recursively.
 - Export a CSV inventory with file name, relative path, extension, file size, SHA-256, and image dimensions when Pillow is installed.
 - Identify identical files by SHA-256 so you can review duplicates.
 - Read-only operation: source images are never moved, renamed, or deleted.
 
+### Steam review draft helper
+- Select the first pending review draft from a local \`fila_reviews.csv\` queue.
+- Save a readable backup as \`review_atual.txt\`.
+- Copy the review title and body to the clipboard for you to paste manually.
+- Optionally open only the game's public Steam Store page as a reference.
+- Keep publication status under your control; mark a row as \`PUBLICADA\` yourself only after you publish and verify it.
+
+See [Review preparation guide](docs/REVIEW_PREPARATION.md).
+
 ## Dependencies
 
-### Steam Art Assistant
-
+### Artwork catalog
 - **Python 3.9 or newer**.
 - No mandatory third-party Python packages.
 - Optional: **Pillow** to read image dimensions from more image formats.
 
 Install the optional dependency:
 
-```bash
+\`\`\`bash
 python -m pip install Pillow
-```
+\`\`\`
 
 Or install the optional dependencies listed in this repository:
 
-```bash
+\`\`\`bash
 python -m pip install -r requirements-optional.txt
-```
+\`\`\`
+
+### Review draft helper
+- **Python 3.9 or newer**.
+- Tkinter (usually included with the Windows Python installer; the Tcl/Tk component must be installed).
+- No third-party Python packages.
 
 ### Steam games CSV exporter (separate tool)
 
 If you want a CSV containing your own Steam games, use the separate [Steam Library Exporter](https://github.com/FunnyEntity/steam_library_exporter). It is not bundled with this project and has its own requirements:
 
 - Python 3.11 or newer.
-- Its dependencies, installed from that project's `requirements.txt`.
+- Its dependencies, installed from that project's \`requirements.txt\`.
 - A Steam Web API key and your SteamID64.
 - Your Steam profile and Game details must be set to **Public** for the Web API to return your library.
 
@@ -44,27 +58,36 @@ See [the CSV export instructions](docs/USAGE.md#export-your-steam-game-list-to-c
 
 ## Quick start: catalog artwork
 
-```bash
+\`\`\`bash
 python src/artwork_catalog.py "/path/to/artwork" --output artwork_inventory.csv
-```
+\`\`\`
 
 On Windows, for example:
 
-```powershell
-py -3 src\artwork_catalog.py "C:\Users\YourName\Pictures\Steam Artwork" --output artwork_inventory.csv
-```
+\`\`\`powershell
+py -3 src\\artwork_catalog.py "C:\\Users\\YourName\\Pictures\\Steam Artwork" --output artwork_inventory.csv
+\`\`\`
 
 Open the generated CSV in a spreadsheet program. Review duplicate hashes before deciding what to keep.
 
+## Quick start: prepare a review draft on Windows
+
+1. Copy your own prepared \`fila_reviews.csv\` into the \`tools\` folder.
+2. Run \`tools\\preparar_review.bat\`.
+3. Review the copied title and text, then paste them into the appropriate Steam fields yourself.
+4. Publish manually, if you choose, and update the queue status yourself.
+
+The helper does not open a review form or fill any Steam page. See the [complete guide](docs/REVIEW_PREPARATION.md) for the required CSV columns and workflow.
+
 ## Manual publishing workflow
 
-1. Use this tool to inventory and review your local artwork.
-2. Prepare your title, description, tags, and visibility settings separately.
+1. Use this tool to inventory and review your local artwork or prepare review drafts.
+2. Prepare your title, description, review text, tags, and visibility settings separately.
 3. Open Steam yourself in your normal browser and sign in directly on the official website.
-4. Upload and publish manually, reviewing the page and all settings before submitting.
-5. Update your own records after verifying the result on the Steam Community page.
+4. Upload or paste content and publish manually, reviewing the page and all settings before submitting.
+5. Verify the result on the Steam Community page before recording it as complete.
 
-Never put passwords, session cookies, browser profiles, API tokens, personal game-library CSVs, or other private account data in this repository.
+Never put passwords, session cookies, browser profiles, API tokens, personal game-library CSVs, or private review queues in this repository.
 
 ## Project scope and disclaimer
 

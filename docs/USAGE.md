@@ -6,11 +6,13 @@ The artwork cataloger requires Python 3.9 or newer and has no mandatory third-pa
 
 Optional image-dimension support:
 
-```bash
+\`\`\`bash
 python -m pip install -r requirements-optional.txt
-```
+\`\`\`
 
 This installs Pillow. Without Pillow, the cataloger still scans images and calculates file hashes; width and height are left blank.
+
+The Windows review draft helper also requires Python 3.9 or newer with Tkinter/Tcl-Tk installed. It uses only Python standard-library modules; no additional pip packages are required.
 
 ## 2. Export your Steam game list to CSV
 
@@ -23,22 +25,22 @@ Use the separate [Steam Library Exporter](https://github.com/FunnyEntity/steam_l
 3. Install Python 3.11 or newer if it is not already installed.
 4. Open a terminal in the extracted exporter folder and install its dependencies:
 
-   ```bash
+   \`\`\`bash
    python -m pip install -r requirements.txt
-   ```
+   \`\`\`
 
 5. In Steam, open **Settings → Privacy** and set **My profile** and **Game details** to **Public** while exporting. You can restore your preferred privacy settings afterward.
 6. Obtain your Steam Web API key from [steamcommunity.com/dev/apikey](https://steamcommunity.com/dev/apikey). Keep this key private; do not paste it into this repository, an issue, or a public message.
 7. Find your SteamID64 (the 17-digit numeric ID) using [steamid.io](https://steamid.io).
 8. Launch the exporter's graphical interface:
 
-   ```bash
+   \`\`\`bash
    python steam_export_gui.py
-   ```
+   \`\`\`
 
-   Alternatively, use its interactive command-line interface with `python steam_export.py`.
+   Alternatively, use its interactive command-line interface with \`python steam_export.py\`.
 9. Enter your own Steam Web API key and SteamID64 in the exporter. Choose **CSV**, leave the game limit at **0 / all games**, and start the export.
-10. When the export finishes, locate the generated `steam_library.csv` (or the output filename you selected) in the exporter's output folder. Keep it on your computer; do not upload it to this public repository.
+10. When the export finishes, locate the generated \`steam_library.csv\` (or the output filename you selected) in the exporter's output folder. Keep it on your computer; do not upload it to this public repository.
 
 The exporter is a separate third-party project. Its own README contains the current installation and usage details. Its API key is a credential: never commit it, share it, or include it in screenshots.
 
@@ -46,27 +48,31 @@ The exporter is a separate third-party project. Its own README contains the curr
 
 Run the cataloger against a folder containing your artwork images:
 
-```bash
+\`\`\`bash
 python src/artwork_catalog.py "./artwork" --output inventory.csv
-```
+\`\`\`
 
-Recursive scanning is enabled by default. Use `--no-recursive` to scan only the selected folder.
+Recursive scanning is enabled by default. Use \`--no-recursive\` to scan only the selected folder.
 
 The generated artwork inventory CSV contains:
-- `file_name`: image filename.
-- `relative_path`: path relative to the scanned folder.
-- `extension`: file extension.
-- `size_bytes`: file size.
-- `sha256`: content hash; matching hashes indicate byte-identical files.
-- `width` and `height`: populated when Pillow can read the image.
-- `duplicate_of`: first file encountered with the same SHA-256, if any.
+- \`file_name\`: image filename.
+- \`relative_path\`: path relative to the scanned folder.
+- \`extension\`: file extension.
+- \`size_bytes\`: file size.
+- \`sha256\`: content hash; matching hashes indicate byte-identical files.
+- \`width\` and \`height\`: populated when Pillow can read the image.
+- \`duplicate_of\`: first file encountered with the same SHA-256, if any.
 
-**Important:** the Steam game-library CSV and the artwork inventory CSV are two different files. The current artwork cataloger scans local image files; it does not yet import or process the game-library CSV.
+**Important:** the Steam game-library CSV and the artwork inventory CSV are two different files. The current artwork cataloger scans local image files; it does not import or process the game-library CSV.
 
 The cataloger never modifies source images.
 
-## 4. Publish manually
+## 4. Prepare Steam review drafts
 
-The catalog is a preparation aid only. To publish, open the official Steam Community website yourself, sign in directly, choose the appropriate artwork page, upload the file, review all fields, and submit manually. Verify the published result before recording it as complete.
+See [Review preparation guide](REVIEW_PREPARATION.md) for the queue format, setup, and Windows instructions.
 
-No script in this repository should automate browser interaction, form submission, account actions, or requests to Steam services.
+## 5. Publish manually
+
+The catalog and review helper are preparation aids only. To publish, open the official Steam Community website yourself, sign in directly, choose the appropriate page, paste or upload your content, review all fields, and submit manually. Verify the published result before recording it as complete.
+
+No script in this repository should automate browser interaction, form submission, account actions, or requests that perform actions on Steam services.
