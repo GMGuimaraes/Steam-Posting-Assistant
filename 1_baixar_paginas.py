@@ -3,7 +3,7 @@ import time
 from playwright.sync_api import sync_playwright
 
 # --- CONFIGURAÇÃO ---
-STEAM_ID = "Otakus2Otomes"
+STEAM_ID = "YOUR_ID_STEAM"
 PROFILE_DIR = "steam_perfil"
 OUTPUT_DIR = "html_pages"
 
