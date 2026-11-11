@@ -1,0 +1,2 @@
+# Optional dependency for reading image dimensions in artwork_catalog.py
+Pillow>=9.2
