@@ -37,6 +37,12 @@ The helper does **not** sign in, open or fill a review form, submit, or publish 
 - Identifies byte-identical files by SHA-256.
 - Read-only: source images are never moved, renamed, or deleted.
 
+### Graphical launcher
+- Provides a Tkinter desktop window with clickable buttons for the scripts found in the project folder.
+- Opens interactive tools in separate terminal windows so login prompts and S/N/P choices remain available.
+- Includes a folder picker for artwork cataloging and a live process-status indicator.
+- Detects optional artwork posting and diagnostic scripts when those files are present.
+
 ## Requirements
 
 - Windows 10 or newer is recommended for the included batch launcher and clipboard workflow.
@@ -60,6 +66,16 @@ py -3 -m pip install Pillow
 ~~~
 
 Or install Pillow from `requirements-optional.txt`.
+
+## Start the graphical interface
+
+Double-click `iniciar_interface.bat`, or run:
+
+~~~powershell
+py -3 launcher_gui.py
+~~~
+
+The launcher shows buttons only for scripts available beside it. Interactive scripts open in their own terminal window; the interface remains available to start another tool and display process status.
 
 ## Quick start
 

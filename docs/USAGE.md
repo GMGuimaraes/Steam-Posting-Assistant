@@ -1,5 +1,17 @@
 # Usage guide
 
+## Graphical launcher
+
+On Windows, double-click `iniciar_interface.bat`, or run:
+
+~~~powershell
+py -3 launcher_gui.py
+~~~
+
+The launcher discovers the scripts available in the project folder and displays a button for each one. Interactive scripts open in a separate terminal so you can complete manual login steps and answer the review queue prompts. The interface also provides an artwork-folder picker and process status.
+
+The GUI uses Tkinter from the Python standard library; no extra pip package is required.
+
 ## 1. Install dependencies
 
 The project uses Python 3.9 or newer.
