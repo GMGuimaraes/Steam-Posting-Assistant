@@ -11,6 +11,7 @@ venv/
 *.log
 *.csv
 *.json
+!**/*.example.json
 *.jsonl
 *.sqlite3
 *.db
@@ -22,6 +23,7 @@ steam_perfil/
 SteamPost-perfil/
 review_atual.txt
 fila_reviews.csv
+envio/erros/
 
 # Browser state and credentials
 *profile*/

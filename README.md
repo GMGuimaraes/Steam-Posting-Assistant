@@ -1,147 +1,147 @@
 # Steam Posting Assistant
 
-A local-first toolkit for collecting and organizing Steam review history, preparing review drafts in a persistent queue, and cataloging artwork files. It keeps account actions under the user's control: review publication is always manual, and the cataloger never modifies source images.
+A local-first toolkit for collecting Steam review history, preparing review drafts, cataloging artwork, and publishing artwork through supervised or automated workflows. A Tkinter desktop launcher provides buttons for the scripts that are present in the project folder.
 
 ## Features
 
 ### Steam review-history downloader
-- Opens Steam Community in a persistent Playwright browser profile so the user can sign in manually and reuse the session locally.
-- Downloads review-history pages sequentially using page-number URLs.
+- Opens Steam Community in a persistent Playwright browser profile so the user can sign in manually.
+- Downloads review-history pages sequentially and saves their HTML locally in the html_pages folder.
 - Waits for review containers to render and applies delays between requests.
-- Saves the retrieved HTML pages locally in `html_pages/` for offline processing.
-- Stops when the profile's review history reaches an empty/end-of-history page.
+- Stops when it reaches an empty/end-of-history page.
 
 ### Review-history CSV compiler
-- Reads the locally saved HTML pages in numeric page order.
+- Reads saved HTML pages in numeric order.
 - Extracts game names, Steam AppIDs, recommendation sentiment, and review text when available.
-- Removes duplicate AppIDs and writes a UTF-8 CSV file.
-- Reports pages that could not be parsed and preserves successfully extracted records in the output.
+- Removes duplicate AppIDs and exports a UTF-8 CSV.
+- Reports pages that could not be parsed while preserving successfully extracted records.
 
 ### Steam review draft queue
-- Reads a private `fila_reviews.csv` queue based on `tools/fila_reviews.example.csv`.
-- Opens the specific public Steam Store URL for each AppID; the user confirms whether the correct game page opened.
-- Marks invalid AppIDs or pages that fail/redirect to a general Steam page as `UNAVAILABLE` and advances to the next row.
-- Saves the current review to `review_atual.txt` and copies the complete title and body to the clipboard.
-- Offers three controls after manual publication:
-  - **S** — confirm that the user published the review; save `PUBLICADA` and continue.
-  - **N** — leave the current row as `DRAFT` and exit.
-  - **P** — save the queue, record a pause note, leave the current row as `DRAFT`, and exit.
-- Resumes from the first pending `DRAFT` on the next run. Rows marked `PUBLICADA` or `UNAVAILABLE` are not presented again.
-- Saves queue updates atomically and creates a local backup before the first update.
+- Reads a private fila_reviews.csv queue based on tools/fila_reviews.example.csv.
+- Opens the specific public Store page for each AppID; the user confirms whether the correct game page loaded.
+- Marks invalid or incorrectly redirected pages as UNAVAILABLE and advances to the next row.
+- Saves the current review to review_atual.txt and copies the complete title and body to the clipboard.
+- Offers three choices after manual publication:
+  - **S** — the user confirms publication; save PUBLICADA and continue.
+  - **N** — leave the row as DRAFT and exit.
+  - **P** — save the queue and a timestamped pause note, leave the row as DRAFT, and exit.
+- Resumes at the first pending DRAFT. PUBLICADA and UNAVAILABLE rows are skipped.
+- Saves queue changes atomically and creates an initial backup.
 
-The helper does **not** sign in, open or fill a review form, submit, or publish anything on Steam. The user pastes and publishes the review manually, then confirms it with **S**.
+The review helper never submits a review. The user pastes and publishes manually and should choose S only after verifying publication.
 
 ### Artwork catalog
-- Recursively scans a folder of artwork images.
-- Exports file name, relative path, extension, size, SHA-256, and image dimensions when Pillow is installed.
+- Recursively scans a local folder of images.
+- Exports filename, relative path, extension, size, SHA-256, and dimensions when Pillow is installed.
 - Identifies byte-identical files by SHA-256.
-- Read-only: source images are never moved, renamed, or deleted.
+- Read-only: source images are not moved, renamed, or deleted.
+
+### Artwork publishing and diagnostics
+- envio/postar_tudo.py uses Playwright to upload artwork to the Steam Community hub selected in the manifest.
+- Uses the Community upload action, not the profile-only save action.
+- Tracks image hashes and AppIDs in a local history to avoid reposting the same image to the same game.
+- Handles errors per target, saves manifest/history updates atomically, and writes logs and diagnostic screenshots/text.
+- Tries to like and favorite confirmed uploads.
+- Uses a limit of 10 uploads per run, up to 10 targets per image, 2 attempts per target, 120–300 second delays, and at most 5 free-game claims per run.
+- If an upload form is unavailable because the game is not owned, it may claim the game only when it is free and passes the script's safety checks. It never buys paid games.
+- Automatic deletion of original artwork is disabled; source files are preserved.
+- envio/enviar_artwork.py is a supervised alternative: it opens the upload form, attaches the image, fills title/description, and waits for the user to review and publish manually.
+- envio/inspecionar_form.py is a read-only diagnostic tool. It saves a screenshot and a list of form elements; it does not publish.
+
+**Authorship warning:** the Steam form may require the uploader to certify that they are the original creator. Set autoria_propria to true only for artwork you created. The assisted mode only leaves the final click to a human; it does not change the meaning of the certification. Permission to repost someone else's work is not the same as being its creator. Do not certify authorship unless it is true.
 
 ### Graphical launcher
-- Provides a Tkinter desktop window with clickable buttons for the scripts found in the project folder.
-- Opens interactive tools in separate terminal windows so login prompts and S/N/P choices remain available.
-- Includes a folder picker for artwork cataloging and a live process-status indicator.
-- Detects optional artwork posting and diagnostic scripts when those files are present.
+- launcher_gui.py creates a desktop window with clickable buttons for scripts found in the project folder.
+- Interactive scripts open in separate terminal windows so login prompts and S/N/P choices remain available.
+- Includes a folder picker for artwork cataloging and a process-status indicator.
+- Optional artwork buttons appear only when their scripts and local manifesto.json are present.
 
 ## Requirements
 
-- Windows 10 or newer is recommended for the included batch launcher and clipboard workflow.
+- Windows 10 or newer is recommended.
 - Python 3.9 or newer.
-- For review-history download: Playwright and its Chromium browser.
-- For CSV compilation: Beautiful Soup 4.
-- For review draft preparation: Tkinter/Tcl-Tk (normally included with the Windows Python installer); no third-party package is required.
-- Optional for artwork dimensions: Pillow.
+- Playwright for the browser-based downloader and artwork tools.
+- Beautiful Soup 4 for compiling saved review pages.
+- Tkinter for the GUI and clipboard support; normally included with the standard Windows Python installer.
+- Pillow is optional and only needed for artwork dimensions.
 
-Install the dependencies used by the review-history downloader/compiler:
+Install required packages:
 
 ~~~powershell
-py -3 -m pip install playwright beautifulsoup4
+py -3 -m pip install -r requirements.txt
 py -3 -m playwright install chromium
 ~~~
 
 Optional image-dimension support:
 
 ~~~powershell
-py -3 -m pip install Pillow
+py -3 -m pip install -r requirements-optional.txt
 ~~~
 
-Or install Pillow from `requirements-optional.txt`.
+## Quick start
 
-## Start the graphical interface
+### Start the graphical interface
 
-Double-click `iniciar_interface.bat`, or run:
+Double-click iniciar_interface.bat, or run:
 
 ~~~powershell
 py -3 launcher_gui.py
 ~~~
 
-The launcher shows buttons only for scripts available beside it. Interactive scripts open in their own terminal window; the interface remains available to start another tool and display process status.
+### Download review history
 
-## Quick start
-
-### 1. Download review-history pages
-
-1. Open `1_baixar_paginas.py` and replace `YOUR_ID_STEAM` in the `STEAM_ID` setting with your Steam profile vanity URL or profile identifier.
+1. Set STEAM_ID in 1_baixar_paginas.py to your Steam profile vanity URL or profile identifier.
 2. Run:
 
 ~~~powershell
 py -3 1_baixar_paginas.py
 ~~~
 
-3. Sign in to Steam manually in the browser window if necessary.
-4. Return to the terminal and press Enter to begin downloading pages.
+3. Sign in manually in the browser if necessary, then press Enter in the terminal.
 
-The persistent browser profile and downloaded HTML files remain local to your computer.
-
-### 2. Compile the downloaded pages
-
-After the download is complete, run:
+### Compile the review-history CSV
 
 ~~~powershell
 py -3 2_criar_csv.py
 ~~~
 
-The output is `todos_jogos_com_comentarios.csv`.
+The output is todos_jogos_com_comentarios.csv.
 
-### 3. Prepare review drafts
+### Prepare review drafts
 
-1. Copy `tools/fila_reviews.example.csv` to `tools/fila_reviews.csv`.
-2. Add your own AppIDs, game names, hours, public Store URLs, review titles, review text, and initial `DRAFT` status.
-3. Double-click `tools/postarReview.bat`.
+1. Copy tools/fila_reviews.example.csv to tools/fila_reviews.csv.
+2. Add your own AppIDs, titles, review text, and DRAFT status.
+3. Run tools/postarReview.bat.
+4. Paste and publish manually; use S only after checking the result.
 
-After the script prepares a review, paste the clipboard contents into Steam yourself, publish manually if you choose, and answer **S** only after verifying publication. Use **N** to leave the draft pending and exit, or **P** to save the current queue and pause. On the next run, completed and unavailable rows are skipped.
+See docs/REVIEW_PREPARATION.md.
 
-See [Review preparation guide](docs/REVIEW_PREPARATION.md).
-
-### 4. Catalog artwork
+### Catalog artwork
 
 ~~~powershell
 py -3 src/artwork_catalog.py "C:\path\to\artwork" --output artwork_inventory.csv
 ~~~
 
-The cataloger does not alter the source images.
+### Publish artwork
 
-## Private files and safety
+1. Copy envio/manifesto.example.json to envio/manifesto.json.
+2. Edit the image path, title, description, and target games.
+3. Review docs/ARTWORK_PUBLISHING.md before running.
+4. Double-click envio/postar.bat for the automated workflow, or run envio/enviar_artwork.py envio/manifesto.json for the supervised workflow.
+5. Use envio/inspecionar_form.bat for read-only form diagnostics.
 
-Keep these files and folders on your own computer. Do not commit them:
-- Personal review queues such as `fila_reviews.csv`.
-- Generated review text such as `review_atual.txt`.
-- Steam browser profiles, cookies, and session data.
-- Downloaded HTML pages and personal CSV exports.
-- Steam API keys, passwords, session cookies, or other credentials.
+## Private files
 
-The repository's `.gitignore` excludes common local data, generated outputs, and browser state. Review it before committing new files.
+Do not commit personal queues, manifesto.json, historico_postados.json, generated review text, downloaded HTML, browser profiles, screenshots, logs, Steam cookies, API keys, passwords, or session tokens. The example manifest is safe to share; the real manifest and posting history remain local. Review .gitignore before committing new files.
 
-## Steam Library CSV exporter (optional, separate project)
+## Optional Steam Library CSV exporter
 
-If you need a CSV of your owned Steam games, use the separate [Steam Library Exporter](https://github.com/FunnyEntity/steam_library_exporter). It is not bundled here and has its own dependencies, Steam Web API key, and SteamID64 requirements. Your profile and Game details must be public while exporting. Never commit the API key or personal library export.
+The separate Steam Library Exporter can export an owned-game list, but it is not required by this project. Follow its own README for dependencies, Steam Web API key, SteamID64, and profile privacy requirements. Keep the key and personal library CSV private.
 
 ## Project scope
 
-This is an independent community utility and is not affiliated with, endorsed by, or sponsored by Valve or Steam. Steam and Steam Community are trademarks of Valve Corporation.
-
-The tools are preparation and data-management aids. They do not automate review submission or other account actions on Steam.
+This is an independent community utility and is not affiliated with, endorsed by, or sponsored by Valve or Steam. Follow Steam's current rules. The scripts do not purchase games. Only use artwork you have the right to publish and never make a false authorship certification.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See LICENSE.

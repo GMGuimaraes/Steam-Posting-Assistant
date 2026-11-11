@@ -125,7 +125,7 @@ class SteamPostingAssistant:
             ROOT / "envio" / "postar.bat",
             ROOT / "postar.bat",
         ])
-        if artwork_batch:
+        if artwork_batch and (artwork_batch.parent / "manifesto.json").is_file():
             self._add_action(
                 "5. Postar artworks",
                 "Executa o manifesto local de artes. Requer manifesto.json.",

@@ -1,0 +1,27 @@
+[
+  {
+    "arquivo": "../artes/REPLACE_WITH_YOUR_IMAGE.png",
+    "titulo": "Replace with a title for your original artwork",
+    "descricao": "Replace with a short description of your original artwork.",
+    "autoria_propria": false,
+    "modo_assistido": false,
+    "termos": [
+      "replace",
+      "with",
+      "relevant",
+      "search",
+      "terms"
+    ],
+    "titulos_extra": [
+      "Replace with an alternative title"
+    ],
+    "alvos": [
+      {
+        "nome": "REPLACE_WITH_STEAM_GAME_NAME",
+        "appid": 123456,
+        "tentativas": 0,
+        "postado": false
+      }
+    ]
+  }
+]

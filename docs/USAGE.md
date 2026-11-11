@@ -1,102 +1,100 @@
 # Usage guide
 
-## Graphical launcher
+## 1. Start the graphical launcher
 
-On Windows, double-click `iniciar_interface.bat`, or run:
+On Windows, double-click iniciar_interface.bat, or run:
 
 ~~~powershell
 py -3 launcher_gui.py
 ~~~
 
-The launcher discovers the scripts available in the project folder and displays a button for each one. Interactive scripts open in a separate terminal so you can complete manual login steps and answer the review queue prompts. The interface also provides an artwork-folder picker and process status.
+The launcher discovers scripts available in the project folder and creates a button for each one. Interactive scripts open in a separate terminal so login prompts and S/N/P choices remain available. The interface includes a folder picker for artwork cataloging and a process-status indicator.
 
-The GUI uses Tkinter from the Python standard library; no extra pip package is required.
+## 2. Install dependencies
 
-## 1. Install dependencies
-
-The project uses Python 3.9 or newer.
-
-For Steam review-history download and compilation:
+Python 3.9 or newer is recommended. Install the required packages:
 
 ~~~powershell
-py -3 -m pip install playwright beautifulsoup4
+py -3 -m pip install -r requirements.txt
 py -3 -m playwright install chromium
 ~~~
 
-The review draft helper uses Python standard-library modules. Tkinter/Tcl-Tk is required for automatic clipboard copying and is normally included in the Windows Python installer.
-
-Optional image-dimension support for the artwork cataloger:
+The GUI and review clipboard use Tkinter/Tcl-Tk, normally included with the standard Windows Python installer. Optional image-dimension support:
 
 ~~~powershell
 py -3 -m pip install -r requirements-optional.txt
 ~~~
 
-This installs Pillow. Without Pillow, the cataloger still scans image files and calculates hashes, but width and height remain blank.
+This installs Pillow. Without Pillow, the artwork cataloger still calculates file hashes but leaves image dimensions blank.
 
-## 2. Download Steam review history
+## 3. Download Steam review history
 
-1. Edit the `STEAM_ID` setting in `1_baixar_paginas.py` and replace `YOUR_ID_STEAM` with your profile vanity URL or profile identifier.
+1. Edit STEAM_ID in 1_baixar_paginas.py and replace YOUR_ID_STEAM with your profile vanity URL or profile identifier.
 2. Run:
 
 ~~~powershell
 py -3 1_baixar_paginas.py
 ~~~
 
-3. Sign in manually in the Playwright browser if necessary.
-4. Return to the terminal and press Enter to start sequential page downloads.
+3. Sign in manually in the browser if needed.
+4. Return to the terminal and press Enter to begin.
 
-The script uses a persistent local browser profile and stores downloaded pages in `html_pages/`. Keep both private.
+Pages are stored locally in html_pages/.
 
-## 3. Compile review history to CSV
-
-After the HTML download finishes:
+## 4. Compile review history to CSV
 
 ~~~powershell
 py -3 2_criar_csv.py
 ~~~
 
-The compiler reads pages in numeric order, attempts to extract game title, AppID, sentiment, and review text, removes duplicate AppIDs, and writes `todos_jogos_com_comentarios.csv`.
+The compiler reads saved pages in numeric order, extracts game title, AppID, sentiment, and review text when available, removes duplicate AppIDs, and writes todos_jogos_com_comentarios.csv.
 
-The parser depends on Steam's page markup and may report pages where no supported review structure was found.
+## 5. Prepare Steam review drafts
 
-## 4. Prepare individual review drafts
+1. Copy tools/fila_reviews.example.csv to tools/fila_reviews.csv.
+2. Add your own data and set pending rows to DRAFT.
+3. Run tools/postarReview.bat.
+4. Paste and publish manually. S confirms a verified publication; N leaves the current row as DRAFT and exits; P saves the queue and pauses.
+5. Later runs skip PUBLICADA and UNAVAILABLE rows.
 
-See [Review preparation guide](REVIEW_PREPARATION.md).
+See REVIEW_PREPARATION.md.
 
-In short:
-
-1. Copy `tools/fila_reviews.example.csv` to `tools/fila_reviews.csv`.
-2. Fill it with your own review data and mark pending rows as `DRAFT`.
-3. Run `tools/postarReview.bat`.
-4. Paste and publish manually. Use **S** only after confirming publication; **N** leaves the row pending and exits; **P** saves the queue and pauses.
-5. Later runs skip rows marked `PUBLICADA` or `UNAVAILABLE`.
-
-The helper does not submit reviews or verify publication automatically.
-
-## 5. Catalog artwork
-
-Run:
+## 6. Catalog artwork
 
 ~~~powershell
 py -3 src/artwork_catalog.py "C:\path\to\artwork" --output artwork_inventory.csv
 ~~~
 
-Recursive scanning is enabled by default. Use `--no-recursive` to scan only the selected folder.
+The cataloger scans recursively by default and never changes source images.
 
-The generated inventory contains file name, relative path, extension, size, SHA-256, optional width and height, and a duplicate reference when matching hashes are found. Source images are never changed.
+## 7. Publish artwork
 
-## 6. Optional Steam Library CSV export
+1. Copy envio/manifesto.example.json to envio/manifesto.json.
+2. Update the image path, title, description, authorship flags, and target games.
+3. Run the automated workflow:
 
-The Steam game-library CSV is separate from the review-history CSV and artwork inventory. To export your owned games, use the third-party [Steam Library Exporter](https://github.com/FunnyEntity/steam_library_exporter).
+~~~powershell
+py -3 envio/postar_tudo.py envio/manifesto.json
+~~~
 
-It has its own requirements, including Python 3.11 or newer, its own dependencies, a Steam Web API key, and your SteamID64. Your Steam profile and Game details must be public while exporting. Keep the API key and personal library export private.
+Or double-click envio/postar.bat.
 
-## 7. Privacy checklist
+For supervised manual upload:
 
-Do not upload:
-- Personal review queues or game-library CSVs.
-- Generated review text or downloaded HTML pages.
-- Browser profiles, cookies, or session files.
-- Passwords, API keys, session tokens, or other credentials.
+~~~powershell
+py -3 envio/enviar_artwork.py envio/manifesto.json
+~~~
 
-Review the repository's `.gitignore` before committing files.
+For read-only diagnostics:
+
+~~~powershell
+py -3 envio/inspecionar_form.py 2452280 767
+~~~
+
+See ARTWORK_PUBLISHING.md for manifest fields, rate limits, and safety rules.
+
+## 8. Privacy and safety
+
+Keep personal review queues, manifesto.json, historico_postados.json, generated review text, downloaded HTML, browser profiles, error screenshots, logs, cookies, passwords, API keys, and session tokens private. The repository ignores common generated/private files and tracks only the example manifest.
+
+Only publish artwork you created when the Steam form requires creator certification. Assisted mode does not change what the certification means; permission to repost is not the same as authorship. Never make a certification that is not true.
