@@ -1,2 +1,6 @@
-# Optional dependency for reading image dimensions in artwork_catalog.py
+# Optional: read image dimensions in artwork_catalog.py
 Pillow>=9.2
+
+# Optional: legacy GUI-based review helper in envio/preparar_review.py
+pyautogui
+pyperclip
